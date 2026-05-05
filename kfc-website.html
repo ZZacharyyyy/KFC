@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KFC — Finger Lickin' Good</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #c8102e;
+    --red-dark: #8b0000;
+    --red-light: #ff2244;
+    --cream: #fff8f0;
+    --gold: #e8a020;
+    --dark: #1a0a00;
+    --text: #2d1200;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--red);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-stripes {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 60px,
+      rgba(0,0,0,0.06) 60px,
+      rgba(0,0,0,0.06) 120px
+    );
+    animation: stripeMove 8s linear infinite;
+  }
+
+  @keyframes stripeMove {
+    from { background-position: 0 0; }
+    to { background-position: 170px 170px; }
+  }
+
+  .hero-badge {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+    animation: badgeDrop 0.9s cubic-bezier(0.34,1.56,0.64,1) both;
+    box-shadow: 0 0 0 12px rgba(255,255,255,0.15), 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  @keyframes badgeDrop {
+    from { transform: translateY(-80px) scale(0.5); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .badge-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--red);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 15vw, 12rem);
+    color: white;
+    letter-spacing: 4px;
+    line-height: 0.9;
+    position: relative;
+    z-index: 2;
+    animation: titleUp 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+    text-shadow: 6px 6px 0 var(--red-dark);
+  }
+
+  @keyframes titleUp {
+    from { transform: translateY(60px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--gold);
+    margin-top: 1rem;
+    position: relative;
+    z-index: 2;
+    animation: titleUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    animation: titleUp 0.8s 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    padding: 1rem 2.5rem;
+    border: 3px solid white;
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-white {
+    background: white;
+    color: var(--red);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: white;
+  }
+
+  .btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0 rgba(255,255,255,0.4);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    z-index: 2;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--gold);
+    padding: 0.8rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-inner {
+    display: inline-block;
+    animation: tick 25s linear infinite;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    color: white;
+  }
+
+  @keyframes tick {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 2rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 6px;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── ABOUT / STORY ── */
+  .about {
+    background: white;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+
+  .about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4a2800;
+    margin-bottom: 1.2rem;
+  }
+
+  .big-stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: var(--red);
+    line-height: 1;
+  }
+
+  .big-stat-label {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: -0.5rem;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--dark);
+    padding: 4rem 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .stat-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .stat-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .stat-item:nth-child(2) { transition-delay: 0.15s; }
+  .stat-item:nth-child(3) { transition-delay: 0.3s; }
+  .stat-item:nth-child(4) { transition-delay: 0.45s; }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+
+  /* ── MENU SECTION ── */
+  .menu { background: var(--cream); }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .menu-card {
+    background: white;
+    border: 3px solid var(--dark);
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.25s, box-shadow 0.25s;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.5s, transform 0.5s, box-shadow 0.25s;
+  }
+
+  .menu-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .menu-card:nth-child(2) { transition-delay: 0.1s; }
+  .menu-card:nth-child(3) { transition-delay: 0.2s; }
+  .menu-card:nth-child(4) { transition-delay: 0.3s; }
+  .menu-card:nth-child(5) { transition-delay: 0.4s; }
+  .menu-card:nth-child(6) { transition-delay: 0.5s; }
+
+  .menu-card:hover {
+    transform: translate(-5px, -5px) !important;
+    box-shadow: 8px 8px 0 var(--red);
+  }
+
+  .menu-card-tag {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    padding: 3px 10px;
+    margin-bottom: 1rem;
+  }
+
+  .menu-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 0.6rem;
+  }
+
+  .menu-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #7a4a20;
+  }
+
+  .menu-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 0.8rem;
+    display: block;
+    filter: grayscale(0);
+  }
+
+  /* ── HISTORY TIMELINE ── */
+  .history { background: var(--red); color: white; }
+
+  .history .section-title { color: white; }
+
+  .timeline {
+    margin-top: 3rem;
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  .tl-item {
+    margin-bottom: 3rem;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .tl-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .tl-item:nth-child(2) { transition-delay: 0.1s; }
+  .tl-item:nth-child(3) { transition-delay: 0.2s; }
+  .tl-item:nth-child(4) { transition-delay: 0.3s; }
+  .tl-item:nth-child(5) { transition-delay: 0.4s; }
+  .tl-item:nth-child(6) { transition-delay: 0.5s; }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -2.45rem;
+    top: 0.3rem;
+    width: 14px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px solid white;
+  }
+
+  .tl-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .tl-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    max-width: 600px;
+    margin-top: 0.3rem;
+  }
+
+  /* ── SECRET RECIPE ── */
+  .recipe { background: var(--dark); }
+
+  .recipe .section-title { color: white; }
+  .recipe .section-label { color: var(--gold); }
+
+  .herbs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+    margin-top: 3rem;
+  }
+
+  .herb-card {
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+
+  .herb-card.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .herb-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,16,46,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .herb-card:hover::after { opacity: 1; }
+
+  .herb-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .herb-desc {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* ── WHY WE LOVE IT ── */
+  .love { background: white; }
+
+  .love-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .love-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .love-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .love-item:nth-child(2) { transition-delay: 0.15s; }
+  .love-item:nth-child(3) { transition-delay: 0.3s; }
+
+  .love-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .love-item h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 0.6rem;
+  }
+
+  .love-item p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #6a4020;
+  }
+
+  /* ── GLOBAL SECTION ── */
+  .global { background: var(--cream); overflow: hidden; }
+
+  .countries-marquee {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .countries-inner {
+    display: inline-block;
+    animation: tick 20s linear infinite;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: var(--red);
+  }
+
+  .countries-inner span { margin: 0 1.5rem; color: var(--gold); }
+
+  .countries-inner2 {
+    display: inline-block;
+    animation: tick 28s linear infinite reverse;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: rgba(200,16,46,0.35);
+  }
+
+  .countries-inner2 span { margin: 0 1.2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  footer .big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    color: var(--red);
+    letter-spacing: 4px;
+    line-height: 1;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { text-shadow: 0 0 0px var(--red); }
+    50%       { text-shadow: 0 0 40px rgba(200,16,46,0.6); }
+  }
+
+  footer p {
+    color: rgba(255,255,255,0.5);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(26,10,0,0.85);
+    backdrop-filter: blur(10px);
+    transform: translateY(-100%);
+    transition: transform 0.4s;
+  }
+
+  nav.show { transform: translateY(0); }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: white;
+    letter-spacing: 4px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">K<span>F</span>C</a>
+  <ul class="nav-links">
+    <li><a href="#about">Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#recipe">Recipe</a></li>
+    <li><a href="#global">Global</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-stripes"></div>
+  <div class="hero-badge"><div class="badge-text">KFC</div></div>
+  <h1>FINGER<br>LICKIN'<br>GOOD</h1>
+  <p class="hero-sub">The World's Most Beloved Fried Chicken</p>
+  <div class="hero-cta">
+    <a href="#about" class="btn btn-white">Our Story</a>
+    <a href="#menu" class="btn btn-outline">The Menu</a>
+  </div>
+  <p class="scroll-hint">▼ scroll</p>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    ORIGINAL RECIPE &nbsp;·&nbsp; 11 HERBS &amp; SPICES &nbsp;·&nbsp; ZINGER BURGER &nbsp;·&nbsp; HOT WINGS &nbsp;·&nbsp; COLESLAW &nbsp;·&nbsp; GRAVY &nbsp;·&nbsp; POPCORN CHICKEN &nbsp;·&nbsp; COLONEL SANDERS &nbsp;·&nbsp; FINGER LICKIN' GOOD &nbsp;·&nbsp; ORIGINAL RECIPE &nbsp;·&nbsp; 11 HERBS &amp; SPICES &nbsp;·&nbsp; ZINGER BURGER &nbsp;·&nbsp; HOT WINGS &nbsp;·&nbsp; COLESLAW &nbsp;·&nbsp; GRAVY &nbsp;·&nbsp; POPCORN CHICKEN &nbsp;·&nbsp; COLONEL SANDERS &nbsp;·&nbsp; FINGER LICKIN' GOOD &nbsp;·&nbsp;
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">The Legend</span>
+        <h2 class="section-title">Born From One Man's Obsession</h2>
+        <p>It all started with a pressure cooker, a roadside restaurant in Corbin, Kentucky, and a man named Harland Sanders who refused to give up. After decades of perfecting his recipe, Colonel Sanders created something the world had never tasted before — impossibly crispy, juicy, perfectly seasoned fried chicken.</p>
+        <p>At the age of 65, with his first Social Security cheque and an unshakeable belief in his recipe, he franchised his first restaurant. Today, KFC serves millions of customers every single day across more than 150 countries. Not bad for a colonel who never gave up.</p>
+        <p>The secret? Eleven herbs and spices blended into the world's most recognisable coating — a recipe so precious it's kept under lock and key, split between two separate companies so no one person knows the full formula.</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="big-stat">65</div>
+        <div class="big-stat-label">Age the Colonel started his empire</div>
+        <br><br>
+        <div class="big-stat" style="font-size:5rem">150+</div>
+        <div class="big-stat-label">Countries serving KFC today</div>
+        <br><br>
+        <div class="big-stat" style="font-size:5rem">1952</div>
+        <div class="big-stat-label">Year of the first franchise</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num">27,000+</div>
+      <div class="stat-label">Restaurants worldwide</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1B+</div>
+      <div class="stat-label">Chickens sold each year</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">11</div>
+      <div class="stat-label">Secret herbs &amp; spices</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">$35B</div>
+      <div class="stat-label">Annual global sales</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="container">
+    <span class="section-label">The Lineup</span>
+    <h2 class="section-title">Menu Icons</h2>
+    <div class="menu-grid">
+      <div class="menu-card">
+        <span class="menu-emoji">🍗</span>
+        <span class="menu-card-tag">The Original</span>
+        <h3>Original Recipe Chicken</h3>
+        <p>The one that started it all. Hand-breaded in the Colonel's secret 11 herbs and spices, pressure-cooked to perfection. Crispy outside, impossibly juicy inside. Nothing comes close.</p>
+      </div>
+      <div class="menu-card">
+        <span class="menu-emoji">🔥</span>
+        <span class="menu-card-tag">Fan Favourite</span>
+        <h3>Zinger Burger</h3>
+        <p>A mighty fillet of crispy spiced chicken in a toasted bun with shredded lettuce and creamy mayo. Launched in 1984 and still the world's most popular chicken sandwich. Iconic doesn't even cover it.</p>
+      </div>
+      <div class="menu-card">
+        <span class="menu-emoji">🍟</span>
+        <span class="menu-card-tag">Side Staple</span>
+        <h3>Chips &amp; Fries</h3>
+        <p>Thick-cut, golden, and perfectly salted. Whether you're dunking in gravy or ketchup, KFC's chips are the ultimate companion to any meal. Simple. Perfect. Addictive.</p>
+      </div>
+      <div class="menu-card">
+        <span class="menu-emoji">🥗</span>
+        <span class="menu-card-tag">Classic Side</span>
+        <h3>Coleslaw</h3>
+        <p>Creamy, crunchy, and refreshing. KFC's coleslaw is the perfect cooling contrast to the bold spices of the chicken. Made fresh daily with shredded cabbage and a legendary dressing. Don't sleep on it.</p>
+      </div>
+      <div class="menu-card">
+        <span class="menu-emoji">🍖</span>
+        <span class="menu-card-tag">Party Pick</span>
+        <h3>Hot Wings</h3>
+        <p>Six bone-in wings tossed in a smoky, spicy hot sauce that hits every note — sweet, tangy, and fierce. Perfect for sharing. Or not. Nobody will judge you for eating them all yourself.</p>
+      </div>
+      <div class="menu-card">
+        <span class="menu-emoji">🫙</span>
+        <span class="menu-card-tag">Underrated Hero</span>
+        <h3>Gravy</h3>
+        <p>Rich, velvety, and deeply savoury. KFC's gravy is the stuff of legend — a thick, glossy sauce made from the drippings of freshly fried chicken. Pour it over everything. This is not optional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section class="history" id="history">
+  <div class="container">
+    <span class="section-label" style="color:rgba(255,255,255,0.5)">Through The Years</span>
+    <h2 class="section-title">The KFC Story</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1930</div>
+        <div class="tl-text">Harland Sanders opens a small service station in Corbin, Kentucky. He begins cooking for hungry travellers — his fried chicken quickly becomes the main attraction. Word spreads fast.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1940</div>
+        <div class="tl-text">The Colonel perfects his secret blend of 11 herbs and spices and introduces the pressure cooker method — dramatically cutting cooking time while sealing in all the juicy flavour that makes KFC unmistakable.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1952</div>
+        <div class="tl-text">The first KFC franchise opens in Salt Lake City, Utah. Sanders drives across the country in his car, cooking chicken for restaurant owners and asking for a small royalty on every piece sold. The empire begins.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1964</div>
+        <div class="tl-text">At 73 years old, Sanders sells the company for $2 million. By this point there are already 600 KFC locations across the United States and Canada. He stays on as brand ambassador and global ambassador for life.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1971</div>
+        <div class="tl-text">KFC goes international in a massive way — over 3,500 outlets in 48 countries. The brand becomes a global phenomenon, adapting its menu to local tastes while keeping the original recipe at its heart.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2023</div>
+        <div class="tl-text">KFC operates over 27,000 restaurants in more than 150 countries. From the UK's beloved Zinger Tower Burger to Japan's Christmas tradition, KFC has woven itself into the fabric of global food culture forever.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECRET RECIPE -->
+<section class="recipe" id="recipe">
+  <div class="container">
+    <span class="section-label">Top Secret</span>
+    <h2 class="section-title" style="color:white">The 11 Herbs<br>&amp; Spices</h2>
+    <p style="color:rgba(255,255,255,0.6); font-size:1.1rem; max-width:600px; margin-top:1rem; line-height:1.7;">
+      The exact recipe is one of the most closely guarded trade secrets in history. Kept in a vault at KFC's Louisville headquarters, handwritten by the Colonel himself. Here's what food scientists and journalists believe goes into the mix...
+    </p>
+    <div class="herbs-grid">
+      <div class="herb-card">
+        <div class="herb-name">Salt</div>
+        <div class="herb-desc">The foundation. Draws moisture out, seasons deep into the meat. Non-negotiable.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">White Pepper</div>
+        <div class="herb-desc">Sharper and more complex than black pepper. Adds heat without bitterness.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Garlic Salt</div>
+        <div class="herb-desc">That unmistakable savoury depth. Garlic without the rawness.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Paprika</div>
+        <div class="herb-desc">Gives the coating its beautiful golden-red colour and subtle sweetness.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Celery Salt</div>
+        <div class="herb-desc">Adds an herby, slightly bitter note that rounds out the flavour profile.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Black Pepper</div>
+        <div class="herb-desc">Classic warmth and bite. Works alongside white pepper for complexity.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Dried Mustard</div>
+        <div class="herb-desc">A tangy kick that brings everything together without tasting like mustard.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Ginger</div>
+        <div class="herb-desc">Warm, slightly floral spice that lifts the whole blend beautifully.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Basil</div>
+        <div class="herb-desc">A subtle herby note that adds freshness and complexity to the coating.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Oregano</div>
+        <div class="herb-desc">Earthy, aromatic — brings the Mediterranean warmth to the spice blend.</div>
+      </div>
+      <div class="herb-card">
+        <div class="herb-name">Marjoram</div>
+        <div class="herb-desc">The mystery herb. Floral and sweet, the Colonel's secret finishing touch.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WE LOVE IT -->
+<section class="love" id="love">
+  <div class="container">
+    <span class="section-label">Why We're Obsessed</span>
+    <h2 class="section-title">What Makes KFC<br>Truly Special</h2>
+    <div class="love-items">
+      <div class="love-item">
+        <span class="love-icon">🔬</span>
+        <h3>The Science of the Crunch</h3>
+        <p>KFC uses a pressure cooker rather than a deep fryer — a method the Colonel invented himself. The pressurised environment forces steam into the meat while sealing the coating, creating that legendary combination of crackling crust and impossibly moist chicken underneath. You simply can't replicate it at home.</p>
+      </div>
+      <div class="love-item">
+        <span class="love-icon">🧬</span>
+        <h3>Flavour Memory</h3>
+        <p>Food scientists call it "sensory nostalgia." The combination of fat, salt, and umami in KFC's coating triggers deep pleasure centres in the brain while the smell alone — those 11 herbs and spices hitting hot oil — can transport you instantly back to your childhood. KFC doesn't just feed you; it feels like a memory.</p>
+      </div>
+      <div class="love-item">
+        <span class="love-icon">🌍</span>
+        <h3>A Truly Global Icon</h3>
+        <p>In Japan, KFC has become the traditional Christmas dinner — over 3.6 million families order it on Christmas Eve. In China, it's the most popular Western restaurant brand. In the UK, it's the go-to post-night-out ritual. KFC has achieved something remarkable: a single restaurant that means something deeply personal to billions of different people.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL -->
+<section class="global" id="global">
+  <div class="container">
+    <span class="section-label">Worldwide</span>
+    <h2 class="section-title">KFC Around<br>The Globe</h2>
+    <p style="font-size:1.1rem; color:#7a4a20; line-height:1.7; max-width:640px; margin-top:1rem;">
+      Every country puts its own spin on the menu — but the original recipe remains sacred. Here's a taste of how the world loves KFC.
+    </p>
+  </div>
+  <div class="countries-marquee">
+    <div class="countries-inner">
+      UK <span>·</span> USA <span>·</span> JAPAN <span>·</span> CHINA <span>·</span> AUSTRALIA <span>·</span> BRAZIL <span>·</span> INDIA <span>·</span> SOUTH AFRICA <span>·</span> GERMANY <span>·</span> FRANCE <span>·</span> CANADA <span>·</span> MEXICO <span>·</span> THAILAND <span>·</span> UAE <span>·</span> NIGERIA <span>·</span> MALAYSIA <span>·</span> PHILIPPINES <span>·</span> UK <span>·</span> USA <span>·</span> JAPAN <span>·</span> CHINA <span>·</span> AUSTRALIA <span>·</span> BRAZIL <span>·</span> INDIA <span>·</span> SOUTH AFRICA <span>·</span> GERMANY <span>·</span> FRANCE <span>·</span> CANADA <span>·</span> MEXICO <span>·</span> THAILAND <span>·</span> UAE <span>·</span> NIGERIA <span>·</span> MALAYSIA <span>·</span> PHILIPPINES <span>·</span>
+    </div>
+  </div>
+  <div class="countries-marquee">
+    <div class="countries-inner2">
+      NEW ZEALAND · INDONESIA · SINGAPORE · SAUDI ARABIA · EGYPT · ARGENTINA · COLOMBIA · KENYA · GHANA · TURKEY · SPAIN · ITALY · POLAND · RUSSIA · VIETNAM · MYANMAR · SRI LANKA · NEW ZEALAND · INDONESIA · SINGAPORE · SAUDI ARABIA · EGYPT · ARGENTINA · COLOMBIA · KENYA · GHANA · TURKEY · SPAIN · ITALY · POLAND · RUSSIA · VIETNAM · MYANMAR · SRI LANKA ·
+    </div>
+  </div>
+  <div class="container" style="margin-top:3rem;">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem;">
+      <div style="border-left: 4px solid var(--red); padding-left:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--dark); margin-bottom:0.3rem;">🇯🇵 Japan</div>
+        <p style="color:#7a4a20; font-size:0.95rem; line-height:1.6;">KFC is a Christmas tradition for over 3.6 million families. Buckets are pre-ordered months in advance. The "Kurisumasu ni wa Kentakkii" campaign launched in 1974 and never stopped.</p>
+      </div>
+      <div style="border-left: 4px solid var(--red); padding-left:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--dark); margin-bottom:0.3rem;">🇮🇳 India</div>
+        <p style="color:#7a4a20; font-size:0.95rem; line-height:1.6;">With a huge vegetarian population, KFC India offers an extensive veg menu — including a stunning Veg Zinger and Paneer Zinger Burger — alongside its classic chicken lineup.</p>
+      </div>
+      <div style="border-left: 4px solid var(--red); padding-left:1.5rem;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--dark); margin-bottom:0.3rem;">🇨🇳 China</div>
+        <p style="color:#7a4a20; font-size:0.95rem; line-height:1.6;">KFC is the #1 Western food brand in China with over 9,000 locations. The menu features congee, egg tarts, and traditional Chinese breakfasts alongside the classic chicken offerings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="big">FINGER LICKIN' GOOD</div>
+  <p>© 2025 — A love letter to the world's greatest fried chicken</p>
+  <p style="margin-top:0.5rem; font-size:0.75rem; color:rgba(255,255,255,0.25);">This is a fan-made page. KFC® is a registered trademark of Yum! Brands, Inc.</p>
+</footer>
+
+<script>
+  // Nav appear on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('show', window.scrollY > 80);
+  });
+
+  // Scroll-triggered reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.stat-item, .menu-card, .tl-item, .herb-card, .love-item').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
